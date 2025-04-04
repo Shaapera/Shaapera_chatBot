@@ -17,7 +17,7 @@ const useChat = () => {
   }, []);
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === 'hell' ? 'dunkel' : 'hell');
   };
 
   const sendMessage = async (text) => {
