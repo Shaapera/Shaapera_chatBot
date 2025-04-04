@@ -32,9 +32,7 @@ export const sendMessageToAPI = async (message) => {
 
     return responses[Math.floor(Math.random() * responses.length)];
 
-    // Actual API call would look like:
-    // const response = await axios.post(`${API_URL}/chat`, { message });
-    // return response.data.reply;
+    
   } catch (error) {
     console.error("API Error:", error);
     throw error;
