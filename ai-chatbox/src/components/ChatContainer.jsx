@@ -49,6 +49,7 @@ const ChatContainer = ({
         <h1 className="text-2xl font-bold text-center w-full">
           Shaapera_ai (Chatbox)
         </h1>
+
         <button
           onClick={toggleTheme}
           className={`p-2 rounded-full ${
@@ -70,20 +71,23 @@ const ChatContainer = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
+      {/* Centered Form */}
       <div
-        className={`p-4 border-t w-full max-w-md ${
+        className={`flex justify-center items-center p-4 w-full max-w-md ${
           theme === "dark"
             ? "border-dark-100 bg-dark-300"
             : "border-gray-200 bg-white"
         }`}
       >
-        <form onSubmit={handleSubmit} className="flex gap-2">
+        <form
+          onSubmit={handleSubmit}
+          className="flex gap-2 justify-center items-center w-full"
+        >
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Schrieben Sie Ihre Nachricten..."
+            placeholder="Schreiben Sie Ihre Nachrichten..."
             className={`flex-1 p-3 rounded-lg focus:outline-none focus:ring-2 ${
               theme === "dark"
                 ? "bg-dark-100 focus:ring-primary-light"
@@ -96,11 +100,9 @@ const ChatContainer = ({
             className={`p-3 rounded-lg ${
               inputMessage.trim() === ""
                 ? theme === "dark"
-                  ? "bg-dark-100 text-gray-500"
-                  : "bg-gray-200 text-gray-400"
-                : theme === "dark"
-                ? "bg-primary-dark text-white"
-                : "bg-primary-DEFAULT text-white"
+                  ? "bg-pink-100 text-pink-500"
+                  : "bg-pink-200 text-pink-400"
+                : "bg-pink-500 text-white"
             } 
               hover:opacity-90 transition-opacity`}
           >
