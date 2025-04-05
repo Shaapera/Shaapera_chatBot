@@ -3,7 +3,7 @@ import useChat from './hooks/useChat';
 import ChatContainer from './components/ChatContainer';
 
 function App() {
-  const { messages, sendMessage, isTyping, theme, toggleTheme } = useChat();
+  const { messages, sendMessage, isTyping, theme, toggleTheme, setTheme } = useChat();
 
   return (
     <div className={theme === 'dark' ? 'dark' : ''}>

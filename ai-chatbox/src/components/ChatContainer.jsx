@@ -64,7 +64,7 @@ const ChatContainer = ({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 w-full max-w-md">
-        {messages.map((message, index) => (
+        {(messages || []).map((message, index) => (
           <Message key={index} message={message} theme={theme} />
         ))}
         {isTyping && <TypingIndicator theme={theme} />}

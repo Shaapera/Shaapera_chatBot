@@ -2,57 +2,73 @@ import { useState, useEffect } from "react";
 import { sendMessageToAPI } from "../services/api";
 
 const useChat = () => {
+  // 1. Define state variables
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [theme, setTheme] = useState("light");
 
-  // welcome message
+  // 2. Initialize with welcome message
   useEffect(() => {
     const welcomeMessage = {
-      text: "Hallo! Ich bin dein Shaaperaai assistent. Wie kann ich dir helfen?",
+      text: "Hello! I'm your AI assistant. How can I help you today?",
       sender: "ai",
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
     setMessages([welcomeMessage]);
   }, []);
 
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-
+  // 3. Correct sendMessage function
   const sendMessage = async (text) => {
-    const userMessage = {
-      text,
-      sender: "user",
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setIsTyping(true);
+    if (!text.trim()) return;
 
     try {
-      const aiResponse = await sendMessageToAPI(text);
+      // Add user message
+      const userMessage = {
+        text,
+        sender: "user",
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, userMessage]);
+      setIsTyping(true);
 
+      // Get AI response
+      const aiResponse = await sendMessageToAPI(text, messages);
+
+      // Add AI message
       const aiMessage = {
         text: aiResponse,
         sender: "ai",
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
-
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      const errorMessage = {
-        text: "Tut mir leid, es gibt problrm mit die verbundung. versuchen Sie nächstemal.",
-        sender: "ai",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      console.error("API Error:", error);
+
+      let errorMessage = "Sorry, I'm having trouble connecting.";
+      if (error.response?.status === 429) {
+        errorMessage = "Too many requests. Please try again later.";
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: errorMessage,
+          sender: "ai",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
     } finally {
       setIsTyping(false);
     }
   };
 
-  return { messages, sendMessage, isTyping, theme, toggleTheme };
+  return {
+    messages,
+    sendMessage,
+    isTyping,
+    theme,
+    setTheme,
+  };
 };
 
 export default useChat;

@@ -1,42 +1,42 @@
 import axios from "axios";
 
-// For development, you can use a mock API or connect to your backend
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY; // Use Vite's environment variable system
 
-const api = axios.create({
-  baseURL: API_URL, // Use the API_URL variable here
-  timeout: 10000, // Optional: Set a timeout for requests
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-export const sendMessageToAPI = async (message) => {
+export const sendMessageToAPI = async (message, conversationHistory = []) => {
   try {
-    // Simulate API delay
-    await new Promise((resolve) =>
-      setTimeout(resolve, 1000 + Math.random() * 2000)
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo", // or "gpt-4" if available
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a helpful AI assistant. Respond in a friendly, conversational manner.",
+          },
+          ...conversationHistory.map((msg) => ({
+            role: msg.sender === "user" ? "user" : "assistant",
+            content: msg.text,
+          })),
+          {
+            role: "user",
+            content: message,
+          },
+        ],
+        temperature: 0.7, // Controls creativity (0-2)
+        max_tokens: 250, // Limit response length
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
 
-    const responses = [
-      "Ic verstehe du fragst über: " + message,
-      "That's an interesting question! Here's what I think about " + message,
-      "I've processed your request regarding " +
-        message +
-        ". Heir ist meine Antwort...",
-      "Danke für die Nachricten! " +
-        message.charAt(0).toUpperCase() +
-        message.slice(1) +
-        " is something I can help with.",
-    ];
-
-    return responses[Math.floor(Math.random() * responses.length)];
-
-    
+    return response.data.choices[0].message.content;
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("OpenAI API Error:", error.response?.data || error.message);
     throw error;
   }
 };
-
-export default api;
