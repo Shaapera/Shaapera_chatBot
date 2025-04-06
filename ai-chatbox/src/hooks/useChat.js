@@ -10,7 +10,7 @@ const useChat = () => {
   // 2. Initialize with welcome message
   useEffect(() => {
     const welcomeMessage = {
-      text: "Hello! I'm your AI assistant. How can I help you today?",
+      text: "Hallo! Ich bin Shaapera_ai. wie kann ich dir helfen?",
       sender: "ai",
       timestamp: new Date().toISOString(),
     };
@@ -22,7 +22,7 @@ const useChat = () => {
     if (!text.trim()) return;
 
     try {
-      // Add user message
+      // Adding user message
       const userMessage = {
         text,
         sender: "user",
@@ -31,10 +31,10 @@ const useChat = () => {
       setMessages((prev) => [...prev, userMessage]);
       setIsTyping(true);
 
-      // Get AI response
+      // Geting AI response
       const aiResponse = await sendMessageToAPI(text, messages);
 
-      // Add AI message
+      // Adding AI message
       const aiMessage = {
         text: aiResponse,
         sender: "ai",
@@ -46,7 +46,7 @@ const useChat = () => {
 
       let errorMessage = "Sorry, I'm having trouble connecting.";
       if (error.response?.status === 429) {
-        errorMessage = "Too many requests. Please try again later.";
+        errorMessage = "error ohh. error. let me be.";
       }
 
       setMessages((prev) => [
